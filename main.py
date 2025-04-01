@@ -11,6 +11,8 @@ sales_pd = sales_pd.merge(stores_pd, on="Store ID")
 dict_stores = {
     store: sales_pd.loc[sales_pd["Store"] == store, :] for store in stores_pd["Store"]
 }
+# buscando o dia atual para utiliza-lo nos calculos do indicador do dia - ultimo dia disponível na planilha de vendas
+day_index = sales_pd["Data"].max()
 
 # mandar os OnePages para cada gerente de loja respectivo
 
