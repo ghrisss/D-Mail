@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 
 # importar e tratar as bases de dados
@@ -20,6 +22,7 @@ day_index = sales_pd["Data"].max()
 backup_path = Path(
     r"/home/vieli/folio/D-Mail/backup_file_stores"
 )  # TODO: fazer isso atraves de um UI talvez
+backup_path.mkdir(parents=True, exist_ok=True)
 backup_files = backup_path.iterdir()
 backup_names = [file.name for file in backup_files]
 for store in dict_stores:
