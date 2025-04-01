@@ -17,5 +17,19 @@ day_index = sales_pd["Data"].max()
 # mandar os OnePages para cada gerente de loja respectivo
 
 # salvar um arquivo de backup em uma pasta
+backup_path = Path(
+    r"/home/vieli/folio/D-Mail/backup_file_stores"
+)  # TODO: fazer isso atraves de um UI talvez
+backup_files = backup_path.iterdir()
+backup_names = [file.name for file in backup_files]
+for store in dict_stores:
+    # identificar se a pasta ja existe
+    if store not in backup_names:
+        new_folder = backup_path / store
+        new_folder.mkdir()
+    # salvar dentro da pasta
+    file_name = f"{day_index.month}_{day_index.day}_{store}.xlsx"
+    file_path = backup_path / store / file_name
+    dict_stores[store].to_excel(file_path)
 
 # mandar um email separado para a diretoria com tudo
