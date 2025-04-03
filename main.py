@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -14,7 +15,8 @@ dict_stores = {
     store: sales_pd.loc[sales_pd["Store"] == store, :] for store in stores_pd["Store"]
 }
 # buscando o dia atual para utiliza-lo nos calculos do indicador do dia - ultimo dia disponível na planilha de vendas
-day_index = sales_pd["Data"].max()
+day_index = datetime.strptime(sales_pd["Data"].max(), "%d/%m/%Y")
+
 
 # calculo de 3 indicadores
 for store in dict_stores:
