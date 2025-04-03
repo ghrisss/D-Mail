@@ -17,25 +17,6 @@ dict_stores = {
 # buscando o dia atual para utiliza-lo nos calculos do indicador do dia - ultimo dia disponível na planilha de vendas
 day_index = datetime.strptime(sales_pd["Data"].max(), "%d/%m/%Y")
 
-
-# calculo de 3 indicadores
-for store in dict_stores:
-    store_sales = dict_stores[store]
-    day_store_sales = store_sales.loc[store_sales["Data"] == day_index, :]
-    # faturamento
-    store_revenue = store_sales["Final Value"].sum()
-    day_store_revenue = day_store_sales["Final Value"].sum()
-    # diversidade de produtos 
-    year_products = len(store_sales["Product"].unique())
-    day_products = len(day_store_sales["Product"].unique())
-    # ticket medio
-    order_values = store_sales.groupby("Code").sum(numeric_only=True)
-    year_average_order_value = order_values["Final Value"].mean()
-    day_order_values = day_store_sales.groupby("Code").sum(numeric_only=True)
-    day_average_order_value = day_order_values["Final Value"].mean()
-
-# mandar os OnePages para cada gerente de loja respectivo
-
 # salvar um arquivo de backup em uma pasta
 backup_path = Path(
     r"/home/vieli/folio/D-Mail/backup_file_stores"
@@ -52,5 +33,20 @@ for store in dict_stores:
     file_name = f"{day_index.month}_{day_index.day}_{store}.xlsx"
     file_path = backup_path / store / file_name
     dict_stores[store].to_excel(file_path)
+
+    # calculo de 3 indicadores
+    store_sales = dict_stores[store]
+    day_store_sales = store_sales.loc[store_sales["Data"] == day_index, :]
+    # faturamento
+    store_revenue = store_sales["Final Value"].sum()
+    day_store_revenue = day_store_sales["Final Value"].sum()
+    # diversidade de produtos
+    year_products = len(store_sales["Product"].unique())
+    day_products = len(day_store_sales["Product"].unique())
+    # ticket medio
+    order_values = store_sales.groupby("Code").sum(numeric_only=True)
+    year_average_order_value = order_values["Final Value"].mean()
+    day_order_values = day_store_sales.groupby("Code").sum(numeric_only=True)
+    day_average_order_value = day_order_values["Final Value"].mean()
 
 # mandar um email separado para a diretoria com tudo
