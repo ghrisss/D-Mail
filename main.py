@@ -3,6 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from mailer import send_email
+
 # definicoes de metas TODO: colocar como um input talvez
 day_revenue_goal = 1000
 year_revenue_goal = 1650000
@@ -17,7 +19,6 @@ stores_pd = pd.read_csv(r"database/stores.csv", encoding="unicode_escape", sep="
 sales_pd = pd.read_csv(r"database/sales.csv")
 
 # calcular indicadores desejados
-
 sales_pd = sales_pd.merge(stores_pd, on="Store ID")
 dict_stores = {
     store: sales_pd.loc[sales_pd["Store"] == store, :] for store in stores_pd["Store"]
@@ -56,5 +57,14 @@ for store in dict_stores:
     year_average_order_value = order_values["Final Value"].mean()
     day_order_values = day_store_sales.groupby("Code").sum(numeric_only=True)
     day_average_order_value = day_order_values["Final Value"].mean()
+
+    # mandar os OnePages para cada gerente de loja respectivo
+    send_email(
+        mail_to=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
+        name_to=emails_pd.loc[emails_pd["Store"] == store, "Manager"].values[0],
+        today=day_index,
+        store=store,
+        file_to_attach=file_path,
+    )
 
 # mandar um email separado para a diretoria com tudo
