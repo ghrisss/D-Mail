@@ -3,6 +3,14 @@ from pathlib import Path
 
 import pandas as pd
 
+# definicoes de metas TODO: colocar como um input talvez
+day_revenue_goal = 1000
+year_revenue_goal = 1650000
+day_products_goal = 4
+year_products_goal = 120
+day_average_order_value_goal = 500
+year_average_order_value_goal = 500
+
 # importar e tratar as bases de dados
 emails_pd = pd.read_csv(r"database/emails.csv")
 stores_pd = pd.read_csv(r"database/stores.csv", encoding="unicode_escape", sep=";")
