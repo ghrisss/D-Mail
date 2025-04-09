@@ -1,4 +1,3 @@
-from datetime import datetime
 from pathlib import Path
 from string import Template
 
@@ -17,7 +16,9 @@ year_average_order_value_goal = 500
 # importar e tratar as bases de dados
 emails_pd = pd.read_csv(r"database/emails.csv")
 stores_pd = pd.read_csv(r"database/stores.csv", encoding="unicode_escape", sep=";")
-sales_pd = pd.read_csv(r"database/sales.csv")
+sales_pd = pd.read_csv(
+    r"database/sales.csv", parse_dates=["Data"], date_format="%d/%m/%Y"
+)
 
 with open("mail-body.html") as file:
     template = file.read()
@@ -29,7 +30,8 @@ dict_stores = {
     store: sales_pd.loc[sales_pd["Store"] == store, :] for store in stores_pd["Store"]
 }
 # buscando o dia atual para utiliza-lo nos calculos do indicador do dia - ultimo dia disponível na planilha de vendas
-day_index = datetime.strptime(sales_pd["Data"].max(), "%d/%m/%Y")
+day_index_timestamp = sales_pd["Data"].max()
+day_index = day_index_timestamp
 
 # salvar um arquivo de backup em uma pasta
 backup_path = Path(
