@@ -58,6 +58,17 @@ for store in dict_stores:
     order_values = store_sales.groupby("Code").sum(numeric_only=True)
     year_average_order_value = order_values["Final Value"].mean()
 
+    day_revenue_color = "green" if day_store_revenue >= day_revenue_goal else "red"
+    year_revenue_color = "green" if year_store_revenue >= year_revenue_goal else "red"
+    day_products_color = "green" if day_products >= day_products_goal else "red"
+    year_products_color = "green" if year_products >= year_products_goal else "red"
+    day_aov_color = (
+        "green" if day_average_order_value >= day_average_order_value_goal else "red"
+    )
+    year_aov_color = (
+        "green" if year_average_order_value >= year_average_order_value_goal else "red"
+    )
+
     # mandar os OnePages para cada gerente de loja respectivo
     send_email(
         mail_to=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
