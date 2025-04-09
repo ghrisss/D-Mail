@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from string import Template
 
 import pandas as pd
 
@@ -17,6 +18,10 @@ year_average_order_value_goal = 500
 emails_pd = pd.read_csv(r"database/emails.csv")
 stores_pd = pd.read_csv(r"database/stores.csv", encoding="unicode_escape", sep=";")
 sales_pd = pd.read_csv(r"database/sales.csv")
+
+with open("mail-body.html") as file:
+    template = file.read()
+mail_html = Template(template)
 
 # calcular indicadores desejados
 sales_pd = sales_pd.merge(stores_pd, on="Store ID")
@@ -67,6 +72,31 @@ for store in dict_stores:
     )
     year_aov_color = (
         "green" if year_average_order_value >= year_average_order_value_goal else "red"
+    )
+
+    body_text = mail_html.safe_substitute(
+        name=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
+        day=day_index.day,
+        month=day_index.month,
+        store=store,
+        day_store_revenue=day_store_revenue,
+        day_revenue_goal=day_revenue_goal,
+        day_revenue_color=day_revenue_color,
+        day_products=day_products,
+        day_products_goal=day_products_goal,
+        day_products_color=day_products_color,
+        day_average_order_value=day_average_order_value,
+        day_average_order_value_goal=day_average_order_value_goal,
+        day_aov_color=day_aov_color,
+        year_store_revenue=year_store_revenue,
+        year_revenue_goal=year_revenue_goal,
+        year_revenue_color=year_revenue_color,
+        year_products=year_products,
+        year_products_goal=year_products_goal,
+        year_products_color=year_products_color,
+        year_average_order_value=year_average_order_value,
+        year_average_order_value_goal=year_average_order_value_goal,
+        year_aov_color=year_aov_color,
     )
 
     # mandar os OnePages para cada gerente de loja respectivo
