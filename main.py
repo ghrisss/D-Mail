@@ -47,16 +47,16 @@ for store in dict_stores:
     store_sales = dict_stores[store]
     day_store_sales = store_sales.loc[store_sales["Data"] == day_index, :]
     # faturamento
-    store_revenue = store_sales["Final Value"].sum()
     day_store_revenue = day_store_sales["Final Value"].sum()
+    year_store_revenue = store_sales["Final Value"].sum()
     # diversidade de produtos
-    year_products = len(store_sales["Product"].unique())
     day_products = len(day_store_sales["Product"].unique())
+    year_products = len(store_sales["Product"].unique())
     # ticket medio
-    order_values = store_sales.groupby("Code").sum(numeric_only=True)
-    year_average_order_value = order_values["Final Value"].mean()
     day_order_values = day_store_sales.groupby("Code").sum(numeric_only=True)
     day_average_order_value = day_order_values["Final Value"].mean()
+    order_values = store_sales.groupby("Code").sum(numeric_only=True)
+    year_average_order_value = order_values["Final Value"].mean()
 
     # mandar os OnePages para cada gerente de loja respectivo
     send_email(
