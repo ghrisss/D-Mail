@@ -89,7 +89,7 @@ for store in dict_stores:
     )
 
     body_text = mail_html.safe_substitute(
-        name=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
+        name=emails_pd.loc[emails_pd["Store"] == store, "Manager"].values[0],
         day=day_index.day,
         month=day_index.month,
         store=store,
