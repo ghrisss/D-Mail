@@ -17,7 +17,19 @@ year_average_order_value_goal = 500
 emails_pd = pd.read_csv(r"database/emails.csv")
 stores_pd = pd.read_csv(r"database/stores.csv", encoding="unicode_escape", sep=";")
 sales_pd = pd.read_csv(
-    r"database/sales.csv", parse_dates=["Data"], date_format="%d/%m/%Y"
+    r"database/sales.csv",
+    parse_dates=["Data"],
+    date_format="%d/%m/%Y",
+    thousands=".",
+    decimal=",",
+    converters={
+        "Unit Value": lambda x: float(
+            x.replace("R$", "").replace(".", "").replace(",", ".").strip()
+        ),
+        "Final Value": lambda x: float(
+            x.replace("R$", "").replace(".", "").replace(",", ".").strip()
+        ),
+    },
 )
 
 with open("mail-body.html") as file:
