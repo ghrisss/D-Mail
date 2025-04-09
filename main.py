@@ -14,8 +14,8 @@ day_average_order_value_goal = 500
 year_average_order_value_goal = 500
 
 # importar e tratar as bases de dados
-emails_pd = pd.read_csv(r"database/emails.csv")
-stores_pd = pd.read_csv(r"database/stores.csv", encoding="unicode_escape", sep=";")
+emails_pd = pd.read_csv(r"database/emails.csv", encoding="utf-8")
+stores_pd = pd.read_csv(r"database/stores.csv", encoding="utf-8", sep=";")
 sales_pd = pd.read_csv(
     r"database/sales.csv",
     parse_dates=["Data"],
