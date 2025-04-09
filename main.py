@@ -60,9 +60,9 @@ for store in dict_stores:
     day_products = len(day_store_sales["Product"].unique())
     year_products = len(store_sales["Product"].unique())
     # ticket medio
-    day_order_values = day_store_sales.groupby("Code").sum(numeric_only=True)
+    day_order_values = day_store_sales.groupby("Code Sale").sum(numeric_only=True)
     day_average_order_value = day_order_values["Final Value"].mean()
-    order_values = store_sales.groupby("Code").sum(numeric_only=True)
+    order_values = store_sales.groupby("Code Sale").sum(numeric_only=True)
     year_average_order_value = order_values["Final Value"].mean()
 
     day_revenue_color = "green" if day_store_revenue >= day_revenue_goal else "red"
