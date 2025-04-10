@@ -1,6 +1,7 @@
 from pathlib import Path
 from string import Template
 
+import numpy as np
 import pandas as pd
 
 from mailer import send_email
@@ -73,9 +74,17 @@ for store in dict_stores:
     year_products = len(store_sales["Product"].unique())
     # ticket medio
     day_order_values = day_store_sales.groupby("Code Sale").sum(numeric_only=True)
-    day_average_order_value = day_order_values["Final Value"].mean()
+    day_average_order_value = (
+        day_order_values["Final Value"].mean()
+        if not day_order_values.empty
+        else np.float64(0.0)
+    )
     order_values = store_sales.groupby("Code Sale").sum(numeric_only=True)
-    year_average_order_value = order_values["Final Value"].mean()
+    year_average_order_value = (
+        order_values["Final Value"].mean()
+        if not order_values.empty
+        else np.float64(0.0)
+    )
 
     day_revenue_color = "green" if day_store_revenue >= day_revenue_goal else "red"
     year_revenue_color = "green" if year_store_revenue >= year_revenue_goal else "red"
