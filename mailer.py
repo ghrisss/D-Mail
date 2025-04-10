@@ -1,12 +1,17 @@
+import smtplib
+from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
-import smtplib
-from datetime import datetime
-from configs import EMAIL_PASSWORD, DEBUG
+from pathlib import Path
+
+from pandas._libs.tslibs.timestamps import Timestamp
+
+from configs import DEBUG, EMAIL_PASSWORD
 
 
-def send_email(email_to, name_to, today: datetime, store, file_to_attach):
+def send_email(
+    email_to: str, name_to: str, today: Timestamp, store: str, file_to_attach: Path
+):
     msg = MIMEMultipart()
     msg["Subject"] = f"OnePage Dia {today.day}/{today.month} - Loja {store}"
     msg["From"] = "seuemail@gmail.com"
