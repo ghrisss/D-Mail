@@ -60,7 +60,7 @@ for store in dict_stores:
     # salvar dentro da pasta
     file_name = f"{day_index.month}_{day_index.day}_{store}.xlsx"
     file_path = backup_path / store / file_name
-    dict_stores[store].to_excel(file_path)
+    # dict_stores[store].to_excel(file_path)
 
     # calculo de 3 indicadores
     store_sales = dict_stores[store]
@@ -112,6 +112,7 @@ for store in dict_stores:
         year_average_order_value_goal=year_average_order_value_goal,
         year_aov_color=year_aov_color,
     )
+    print(f"\u2713 Concluiu a análise para a loja {store} para o dia {day_index.day}/{day_index.month}")
 
     # mandar os OnePages para cada gerente de loja respectivo
     send_email(
