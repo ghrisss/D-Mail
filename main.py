@@ -112,7 +112,9 @@ for store in dict_stores:
         year_average_order_value_goal=year_average_order_value_goal,
         year_aov_color=year_aov_color,
     )
-    print(f"\u2713 Concluiu a análise para a loja {store} para o dia {day_index.day}/{day_index.month}")
+    print(
+        f"\u2713 Concluiu a análise para a loja {store} para o dia {day_index.day}/{day_index.month}"
+    )
 
     # mandar os OnePages para cada gerente de loja respectivo
     send_email(
@@ -120,6 +122,7 @@ for store in dict_stores:
         name_to=emails_pd.loc[emails_pd["Store"] == store, "Manager"].values[0],
         today=day_index,
         store=store,
+        body_text=body_text,
         file_to_attach=file_path,
     )
 
