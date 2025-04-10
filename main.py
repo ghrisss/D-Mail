@@ -60,7 +60,7 @@ for store in dict_stores:
     # salvar dentro da pasta
     file_name = f"{day_index.month}_{day_index.day}_{store}.xlsx"
     file_path = backup_path / store / file_name
-    # dict_stores[store].to_excel(file_path)
+    dict_stores[store].to_excel(file_path)
 
     # calculo de 3 indicadores
     store_sales = dict_stores[store]
@@ -116,7 +116,7 @@ for store in dict_stores:
 
     # mandar os OnePages para cada gerente de loja respectivo
     send_email(
-        mail_to=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
+        email_to=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
         name_to=emails_pd.loc[emails_pd["Store"] == store, "Manager"].values[0],
         today=day_index,
         store=store,
