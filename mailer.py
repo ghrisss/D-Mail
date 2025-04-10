@@ -27,13 +27,17 @@ def send_email(
 
     msg.attach(MIMEText(corpo_email, "html"))
 
-    with open(f"anexos/{file_to_attach}", "rb") as arquivo:
-        msg.attach(MIMEApplication(arquivo.read(), Name=file_to_attach))
+    try:
+        with open(f"anexos/{file_to_attach}", "rb") as arquivo:
+            msg.attach(MIMEApplication(arquivo.read(), Name=file_to_attach))
 
-    servidor = smtplib.SMTP("smtp.gmail.com", 587)
-    servidor.starttls()
-    servidor.login(msg["From"], EMAIL_PASSWORD)
-    servidor.send_message(msg)
-    servidor.quit()
-    if DEBUG:
-        print("Email enviado")
+        servidor = smtplib.SMTP("smtp.gmail.com", 587)
+        servidor.starttls()
+        servidor.login(msg["From"], EMAIL_PASSWORD)
+        servidor.send_message(msg)
+        servidor.quit()
+        if DEBUG:
+            print(f"\u2713  Email enviado ao gerente {name_to} da loja {store}")
+    except FileNotFoundError as err:
+        print(f"Erro ao busca o arquivo backup em anexo {err}")
+        print(f"Abortando operacao de envio referente a loja {store}")
