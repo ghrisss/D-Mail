@@ -33,7 +33,7 @@ sales_pd = pd.read_csv(
     },
 )
 
-with open("mail-body.html") as file:
+with open("templates/mail-body.html") as file:
     template = file.read()
 mail_html = Template(template)
 
@@ -86,6 +86,7 @@ for store in dict_stores:
         else np.float64(0.0)
     )
 
+    # TODO: pelo que enteni, utilizando jinja2 da pra fazer isso no HTML
     day_revenue_color = "green" if day_store_revenue >= day_revenue_goal else "red"
     year_revenue_color = "green" if year_store_revenue >= year_revenue_goal else "red"
     day_products_color = "green" if day_products >= day_products_goal else "red"
@@ -157,7 +158,7 @@ ranked_store_revenue.to_excel(daily_rank_path / file_name)
 
 board_subject = f"Relatorio Diretoria para o Dia {day_index.day}/{day_index.month}"
 
-with open("board-body.html") as file:
+with open("templates/board-body.html") as file:
     template = file.read()
 board_mail_html = Template(template)
 
