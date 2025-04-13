@@ -125,11 +125,11 @@ for store in dict_stores:
         f"\u2713 Concluiu a análise para a loja {store} para o dia {day_index.day}/{day_index.month}"
     )
 
+    subject = f"OnePage Dia {day_index.day}/{day_index.month} - Loja {store}"
     # mandar os OnePages para cada gerente de loja respectivo
     send_email(
         email_to=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
-        name_to=emails_pd.loc[emails_pd["Store"] == store, "Manager"].values[0],
-        today=day_index,
+        subject=subject,
         store=store,
         body_text=body_text,
         file_to_attach=file_path,
