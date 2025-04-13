@@ -66,27 +66,14 @@ for store in dict_stores:
     # calculo de 3 indicadores
     store_sales = dict_stores[store]
     day_store_sales = store_sales.loc[store_sales["Data"] == day_index, :]
-    # faturamento
-    day_store_revenue = day_store_sales["Final Value"].sum()
-    year_store_revenue = store_sales["Final Value"].sum()
-    # diversidade de produtos
-    day_products = len(day_store_sales["Product"].unique())
-    year_products = len(store_sales["Product"].unique())
-    # ticket medio
-    day_order_values = day_store_sales.groupby("Code Sale").sum(numeric_only=True)
-    day_average_order_value = (
-        day_order_values["Final Value"].mean()
-        if not day_order_values.empty
-        else np.float64(0.0)
-    )
-    order_values = store_sales.groupby("Code Sale").sum(numeric_only=True)
-    year_average_order_value = (
-        order_values["Final Value"].mean()
-        if not order_values.empty
-        else np.float64(0.0)
-    )
 
-    # TODO: pelo que enteni, utilizando jinja2 da pra fazer isso no HTML
+    day_store_revenue, day_products, day_average_order_value = store_calculations(
+        day_store_sales
+    )
+    year_store_revenue, year_products, year_average_order_value = store_calculations(
+        store_sales
+    )
+        # TODO: pelo que enteni, utilizando jinja2 da pra fazer isso no HTML
     day_revenue_color = "green" if day_store_revenue >= day_revenue_goal else "red"
     year_revenue_color = "green" if year_store_revenue >= year_revenue_goal else "red"
     day_products_color = "green" if day_products >= day_products_goal else "red"
@@ -137,20 +124,17 @@ for store in dict_stores:
     )
 
 # mandar um email separado para a diretoria com tudo
-stores_revenue = sales_pd.groupby("Loja")[["Store", "Final Value"]].sum()
-ranked_store_revenue = stores_revenue.sort_values(by="Final Value", ascending=False)
-file_name = f"{day_index.month}_{day_index.day}_Anual_Rank.xlsx"
+ranked_store_revenue = board_calculations(sales_pd)
+file_name = f"{day_index.month}_{day_index.day}_annual_rank.xlsx"
 annual_rank_path = backup_path / "annual-rank"
 if not annual_rank_path.exists():
     annual_rank_path.mkdir()
 ranked_store_revenue.to_excel(annual_rank_path / file_name)
 
-day_sales_pd = sales_pd.loc[sales_pd["Data"] == day_index, :]
-stores_day_revenue = sales_pd.groupby("Loja")[["Store", "Final Value"]].sum()
-ranked_stores_day_revenue = stores_day_revenue.sort_values(
-    by="Final Value", ascending=False
+ranked_stores_day_revenue = board_calculations(
+    sales_pd.loc[sales_pd["Data"] == day_index, :]
 )
-file_name = f"{day_index.month}_{day_index.day}_Day_Rank.xlsx"
+file_name = f"{day_index.month}_{day_index.day}_daily_rank.xlsx"
 daily_rank_path = backup_path / "daily-rank"
 if not daily_rank_path.exists():
     daily_rank_path.mkdir()
