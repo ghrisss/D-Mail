@@ -136,3 +136,47 @@ for store in dict_stores:
     )
 
 # mandar um email separado para a diretoria com tudo
+stores_revenue = sales_pd.groupby("Loja")[["Store", "Final Value"]].sum()
+ranked_store_revenue = stores_revenue.sort_values(by="Final Value", ascending=False)
+file_name = f"{day_index.month}_{day_index.day}_Anual_Rank.xlsx"
+annual_rank_path = backup_path / "annual-rank"
+if not annual_rank_path.exists():
+    annual_rank_path.mkdir()
+ranked_store_revenue.to_excel(annual_rank_path / file_name)
+
+day_sales_pd = sales_pd.loc[sales_pd["Data"] == day_index, :]
+stores_day_revenue = sales_pd.groupby("Loja")[["Store", "Final Value"]].sum()
+ranked_stores_day_revenue = stores_day_revenue.sort_values(
+    by="Final Value", ascending=False
+)
+file_name = f"{day_index.month}_{day_index.day}_Day_Rank.xlsx"
+daily_rank_path = backup_path / "daily-rank"
+if not daily_rank_path.exists():
+    daily_rank_path.mkdir()
+ranked_store_revenue.to_excel(daily_rank_path / file_name)
+
+board_subject = f"Relatorio Diretoria para o Dia {day_index.day}/{day_index.month}"
+
+with open("board-body.html") as file:
+    template = file.read()
+board_mail_html = Template(template)
+
+board_body_text = board_mail_html.safe_substitute(
+    first_day_ranked=ranked_stores_day_revenue.index[0],
+    first_day_ranked_revenue=ranked_stores_day_revenue.iloc[0, 0],
+    last_day_ranked=ranked_stores_day_revenue.index[-1],
+    last_day_ranked_revenue=ranked_stores_day_revenue.iloc[0, -1],
+    first_year_ranked=ranked_store_revenue.index[0],
+    first_year_ranked_revenue=ranked_store_revenue.iloc[0, 0],
+    last_year_ranked=ranked_store_revenue.index[-1],
+    last_year_ranked_revenue=ranked_store_revenue.iloc[0, -1],
+)
+
+# TODO: tem de enviar dois anexos nesse caso. Verificar de enviar o parametro como uma lista e resolver la no metodo
+send_email(
+    email_to=emails_pd.loc[emails_pd["Store"] == "Diretoria", "E-mail"].values[0],
+    subject=board_subject,
+    store=None,
+    body_text=body_text,
+    file_to_attach=annual_rank_path / file_name,
+)
