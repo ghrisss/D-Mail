@@ -1,10 +1,10 @@
 from pathlib import Path
 from string import Template
 
-import numpy as np
 import pandas as pd
 
 from mailer import send_email
+from maths import board_calculations, store_calculations
 
 # definicoes de metas TODO: colocar como um input talvez
 day_revenue_goal = 1000
