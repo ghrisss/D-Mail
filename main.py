@@ -111,11 +111,10 @@ for store in dict_stores:
         f"\u2713 Concluiu a análise para a loja {store} para o dia {day_index.day}/{day_index.month}"
     )
 
-    subject = f"OnePage Dia {day_index.day}/{day_index.month} - Loja {store}"
     # mandar os OnePages para cada gerente de loja respectivo
     send_email(
         email_to=emails_pd.loc[emails_pd["Store"] == store, "E-mail"].values[0],
-        subject=subject,
+        subject=f"OnePage Dia {day_index.day}/{day_index.month} - Loja {store}",
         store=store,
         body_text=body_text,
         file_to_attach=file_path,
@@ -135,7 +134,6 @@ file_name = f"{day_index.month}_{day_index.day}_daily_rank.xlsx"
 daily_rank_path = backup_path / "daily-rank"
 check_folder_existence(folder_path=daily_rank_path)
 ranked_stores_day_revenue.to_excel(daily_rank_path / file_name)
-board_subject = f"Relatorio Diretoria para o Dia {day_index.day}/{day_index.month}"
 
 with open("templates/board-body.html") as file:
     template = file.read()
@@ -155,7 +153,7 @@ board_body_text = board_mail_html.safe_substitute(
 # TODO: tem de enviar dois anexos nesse caso. Verificar de enviar o parametro como uma lista e resolver la no metodo
 send_email(
     email_to=emails_pd.loc[emails_pd["Store"] == "Diretoria", "E-mail"].values[0],
-    subject=board_subject,
+    subject=f"Relatorio Diretoria para o Dia {day_index.day}/{day_index.month}",
     store=None,
     body_text=body_text,
     file_to_attach=annual_rank_path / file_name,
