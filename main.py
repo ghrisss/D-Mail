@@ -73,17 +73,6 @@ for store in dict_stores:
     year_store_revenue, year_products, year_average_order_value = store_calculations(
         store_sales
     )
-        # TODO: pelo que enteni, utilizando jinja2 da pra fazer isso no HTML
-    day_revenue_color = "green" if day_store_revenue >= day_revenue_goal else "red"
-    year_revenue_color = "green" if year_store_revenue >= year_revenue_goal else "red"
-    day_products_color = "green" if day_products >= day_products_goal else "red"
-    year_products_color = "green" if year_products >= year_products_goal else "red"
-    day_aov_color = (
-        "green" if day_average_order_value >= day_average_order_value_goal else "red"
-    )
-    year_aov_color = (
-        "green" if year_average_order_value >= year_average_order_value_goal else "red"
-    )
 
     body_text = mail_html.safe_substitute(
         name=emails_pd.loc[emails_pd["Store"] == store, "Manager"].values[0],
@@ -92,22 +81,28 @@ for store in dict_stores:
         store=store,
         day_store_revenue=day_store_revenue,
         day_revenue_goal=day_revenue_goal,
-        day_revenue_color=day_revenue_color,
+        day_revenue_color="green" if day_store_revenue >= day_revenue_goal else "red",
         day_products=day_products,
         day_products_goal=day_products_goal,
-        day_products_color=day_products_color,
+        day_products_color="green" if day_products >= day_products_goal else "red",
         day_average_order_value=day_average_order_value,
         day_average_order_value_goal=day_average_order_value_goal,
-        day_aov_color=day_aov_color,
+        day_aov_color="green"
+        if day_average_order_value >= day_average_order_value_goal
+        else "red",
         year_store_revenue=year_store_revenue,
         year_revenue_goal=year_revenue_goal,
-        year_revenue_color=year_revenue_color,
+        year_revenue_color="green"
+        if year_store_revenue >= year_revenue_goal
+        else "red",
         year_products=year_products,
         year_products_goal=year_products_goal,
-        year_products_color=year_products_color,
+        year_products_color="green" if year_products >= year_products_goal else "red",
         year_average_order_value=year_average_order_value,
         year_average_order_value_goal=year_average_order_value_goal,
-        year_aov_color=year_aov_color,
+        year_aov_color="green"
+        if year_average_order_value >= year_average_order_value_goal
+        else "red",
     )
     print(
         f"\u2713 Concluiu a análise para a loja {store} para o dia {day_index.day}/{day_index.month}"
