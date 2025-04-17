@@ -142,14 +142,14 @@ with open("templates/board-body.html") as file:
 board_mail_html = Template(template)
 
 board_body_text = board_mail_html.safe_substitute(
-    first_day_ranked=ranked_stores_day_revenue.index[0],
-    first_day_ranked_revenue=ranked_stores_day_revenue.iloc[0, 0],
-    last_day_ranked=ranked_stores_day_revenue.index[-1],
-    last_day_ranked_revenue=ranked_stores_day_revenue.iloc[0, -1],
-    first_year_ranked=ranked_store_revenue.index[0],
-    first_year_ranked_revenue=ranked_store_revenue.iloc[0, 0],
-    last_year_ranked=ranked_store_revenue.index[-1],
-    last_year_ranked_revenue=ranked_store_revenue.iloc[0, -1],
+    day_best_store_name=ranked_stores_day_revenue.index[0],
+    day_best_store_revenue=ranked_stores_day_revenue.iloc[0, 0],
+    day_worst_store_name=ranked_stores_day_revenue.index[-1],
+    day_worst_store_revenue=ranked_stores_day_revenue.iloc[0, -1],
+    year_best_store_name=ranked_store_revenue.index[0],
+    year_best_store_revenue=ranked_store_revenue.iloc[0, 0],
+    year_worst_store_name=ranked_store_revenue.index[-1],
+    year_worst_store_revenue=ranked_store_revenue.iloc[0, -1],
 )
 
 # TODO: tem de enviar dois anexos nesse caso. Verificar de enviar o parametro como uma lista e resolver la no metodo
