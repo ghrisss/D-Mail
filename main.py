@@ -6,6 +6,13 @@ import pandas as pd
 from mailer import send_email
 from maths import board_calculations, store_calculations
 
+
+def check_folder_existence(folder_path: Path) -> bool:
+    if not folder_path.exists():
+        folder_path.mkdir()
+    return True
+
+
 # definicoes de metas TODO: colocar como um input talvez
 day_revenue_goal = 1000
 year_revenue_goal = 1650000
@@ -51,13 +58,9 @@ backup_path = Path(
     r"/home/vieli/folio/D-Mail/backup_file_stores"
 )  # TODO: fazer isso atraves de um UI talvez
 backup_path.mkdir(parents=True, exist_ok=True)
-backup_files = backup_path.iterdir()
-backup_names = [file.name for file in backup_files]
 for store in dict_stores:
     # identificar se a pasta ja existe
-    if store not in backup_names:
-        new_folder = backup_path / store
-        new_folder.mkdir()
+    check_folder_existence(folder_path=backup_path / store)
     # salvar dentro da pasta
     file_name = f"{day_index.month}_{day_index.day}_{store}.xlsx"
     file_path = backup_path / store / file_name
@@ -122,8 +125,7 @@ for store in dict_stores:
 ranked_store_revenue = board_calculations(sales_pd)
 file_name = f"{day_index.month}_{day_index.day}_annual_rank.xlsx"
 annual_rank_path = backup_path / "annual-rank"
-if not annual_rank_path.exists():
-    annual_rank_path.mkdir()
+check_folder_existence(annual_rank_path)
 ranked_store_revenue.to_excel(annual_rank_path / file_name)
 
 ranked_stores_day_revenue = board_calculations(
@@ -131,8 +133,7 @@ ranked_stores_day_revenue = board_calculations(
 )
 file_name = f"{day_index.month}_{day_index.day}_daily_rank.xlsx"
 daily_rank_path = backup_path / "daily-rank"
-if not daily_rank_path.exists():
-    daily_rank_path.mkdir()
+check_folder_existence(folder_path=daily_rank_path)
 ranked_store_revenue.to_excel(daily_rank_path / file_name)
 
 board_subject = f"Relatorio Diretoria para o Dia {day_index.day}/{day_index.month}"
