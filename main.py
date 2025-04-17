@@ -134,8 +134,7 @@ ranked_stores_day_revenue = board_calculations(
 file_name = f"{day_index.month}_{day_index.day}_daily_rank.xlsx"
 daily_rank_path = backup_path / "daily-rank"
 check_folder_existence(folder_path=daily_rank_path)
-ranked_store_revenue.to_excel(daily_rank_path / file_name)
-
+ranked_stores_day_revenue.to_excel(daily_rank_path / file_name)
 board_subject = f"Relatorio Diretoria para o Dia {day_index.day}/{day_index.month}"
 
 with open("templates/board-body.html") as file:
